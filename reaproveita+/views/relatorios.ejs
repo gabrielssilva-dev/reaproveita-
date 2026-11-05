@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relatórios | reaproveita+</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="dashboard-page">
+    <div class="dashboard-shell">
+      <aside class="sidebar">
+        <div class="brand-box">
+          <span class="brand-mark">R+</span>
+          <span class="brand-text">reaproveita</span>
+        </div>
+        <div class="profile-box">
+          <div class="avatar">RP</div>
+          <span>Gestão</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/" class="nav-link <%= currentPage === '/' ? 'active' : '' %>"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+          <a href="/estabelecimentos" class="nav-link <%= currentPage === '/estabelecimentos' ? 'active' : '' %>"><span class="nav-icon">🏬</span><span>Estabelecimentos</span></a>
+          <a href="/alimentos" class="nav-link <%= currentPage === '/alimentos' ? 'active' : '' %>"><span class="nav-icon">🥖</span><span>Alimentos</span></a>
+          <a href="/reservas" class="nav-link <%= currentPage === '/reservas' ? 'active' : '' %>"><span class="nav-icon">📦</span><span>Reservas</span></a>
+          <a href="/relatorios" class="nav-link <%= currentPage === '/relatorios' ? 'active' : '' %>"><span class="nav-icon">📊</span><span>Relatórios</span></a>
+        </nav>
+      </aside>
+
+      <main class="content-panel">
+        <div class="page-header">
+          <div>
+            <p class="page-kicker">Você está em:</p>
+            <h1>📊 <%= currentPageLabel %></h1>
+          </div>
+        </div>
+
+        <section class="stats-grid double-grid">
+          <article class="card stat">
+            <span>Valor em estoque</span>
+            <strong><%= formatCurrency(relatorio.totalValorizado) %></strong>
+          </article>
+          <article class="card stat">
+            <span>Reservas em andamento</span>
+            <strong><%= formatCurrency(relatorio.totalReservas) %></strong>
+          </article>
+          <article class="card stat">
+            <span>Doações registradas</span>
+            <strong><%= relatorio.totalDoacoes %></strong>
+          </article>
+          <article class="card stat accent">
+            <span>Desperdício evitado</span>
+            <strong><%= formatCurrency(relatorio.totalReservas || 0) %></strong>
+          </article>
+        </section>
+
+        <section class="table-card">
+          <div class="section-header">
+            <h2>Impacto de desperdício evitado</h2>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Estabelecimento</th>
+                <th>Itens</th>
+                <th>Valor em estoque</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (!relatorio.porEstabelecimento || relatorio.porEstabelecimento.length === 0) { %>
+                <tr>
+                  <td colspan="3" class="empty">Sem dados para relatório.</td>
+                </tr>
+              <% } else { %>
+                <% relatorio.porEstabelecimento.forEach((linha) => { %>
+                  <tr>
+                    <td><%= linha.estabelecimento %></td>
+                    <td><%= linha.alimentos %></td>
+                    <td><%= formatCurrency(linha.valor_estoque) %></td>
+                  </tr>
+                <% }) %>
+              <% } %>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

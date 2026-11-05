@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alimentos | reaproveita+</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="dashboard-page">
+    <div class="dashboard-shell">
+      <aside class="sidebar">
+        <div class="brand-box">
+          <span class="brand-mark">R+</span>
+          <span class="brand-text">reaproveita</span>
+        </div>
+        <div class="profile-box">
+          <div class="avatar">RP</div>
+          <span>Gestão</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/" class="nav-link <%= currentPage === '/' ? 'active' : '' %>"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+          <a href="/estabelecimentos" class="nav-link <%= currentPage === '/estabelecimentos' ? 'active' : '' %>"><span class="nav-icon">🏬</span><span>Estabelecimentos</span></a>
+          <a href="/alimentos" class="nav-link <%= currentPage === '/alimentos' ? 'active' : '' %>"><span class="nav-icon">🥖</span><span>Alimentos</span></a>
+          <a href="/reservas" class="nav-link <%= currentPage === '/reservas' ? 'active' : '' %>"><span class="nav-icon">📦</span><span>Reservas</span></a>
+          <a href="/relatorios" class="nav-link <%= currentPage === '/relatorios' ? 'active' : '' %>"><span class="nav-icon">📊</span><span>Relatórios</span></a>
+        </nav>
+      </aside>
+
+      <main class="content-panel">
+        <div class="page-header">
+          <div>
+            <p class="page-kicker">Você está em:</p>
+            <h1>🥖 <%= currentPageLabel %></h1>
+          </div>
+        </div>
+
+        <section class="form-card">
+          <div class="section-header">
+            <h2>Gerenciar alimentos</h2>
+          </div>
+
+          <form method="POST" action="/alimentos" class="form-grid">
+            <label>
+              Estabelecimento
+              <select name="estabelecimento_id" required>
+                <option value="">Selecione</option>
+                <% estabelecimentos.forEach((estabelecimento) => { %>
+                  <option value="<%= estabelecimento.id %>"><%= estabelecimento.nome %></option>
+                <% }) %>
+              </select>
+            </label>
+            <label>
+              Nome do alimento
+              <input type="text" name="nome" placeholder="Ex.: Bolo de cenoura" required />
+            </label>
+            <label>
+              Categoria
+              <input type="text" name="categoria" placeholder="Ex.: Padaria" required />
+            </label>
+            <label>
+              Quantidade
+              <input type="number" name="quantidade" min="1" required />
+            </label>
+            <label>
+              Unidade
+              <input type="text" name="unidade" value="unidade" />
+            </label>
+            <label>
+              Validade
+              <input type="date" name="data_validade" required />
+            </label>
+            <label>
+              Valor unitário
+              <input type="number" step="0.01" name="valor_unitario" value="0" min="0" />
+            </label>
+            <label>
+              Desconto (%)
+              <input type="number" name="desconto" min="0" max="100" value="0" />
+            </label>
+            <label class="full-width">
+              Observação
+              <textarea name="observacao" rows="3" placeholder="Detalhes do lote, produção ou motivo do alerta..."></textarea>
+            </label>
+            <div class="form-actions full-width">
+              <button type="submit">💾 Salvar alimento</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="table-card">
+          <div class="section-header">
+            <h2>Estoque e validade</h2>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Estabelecimento</th>
+                <th>Quantidade</th>
+                <th>Validade</th>
+                <th>Status</th>
+                <th>Desconto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (alimentos.length === 0) { %>
+                <tr>
+                  <td colspan="6" class="empty">Nenhum alimento cadastrado.</td>
+                </tr>
+              <% } else { %>
+                <% alimentos.forEach((item) => { %>
+                  <tr>
+                    <td><%= item.nome %></td>
+                    <td><%= item.estabelecimento_nome %></td>
+                    <td><%= item.quantidade %> <%= item.unidade %></td>
+                    <td><%= new Date(item.data_validade).toLocaleDateString('pt-BR') %></td>
+                    <td>
+                      <span class="badge <%= item.status_validade === 'Vencido' ? 'danger' : item.status_validade === 'Próximo do vencimento' ? 'warning' : 'success' %>">
+                        <%= item.status_validade %>
+                      </span>
+                    </td>
+                    <td><%= item.desconto %>%</td>
+                  </tr>
+                <% }) %>
+              <% } %>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

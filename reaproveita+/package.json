@@ -1,0 +1,24 @@
+{
+  "name": "reaproveita+",
+  "version": "1.0.0",
+  "description": "Aplicação web para reduzir desperdício de alimentos próximos do vencimento.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "food-waste",
+    "restaurants",
+    "supermarkets",
+    "inventory",
+    "dashboard"
+  ],
+  "author": "Copilot",
+  "license": "MIT",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
+  }
+}

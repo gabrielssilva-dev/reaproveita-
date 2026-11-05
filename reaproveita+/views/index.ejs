@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>reaproveita+</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="dashboard-page">
+    <div class="dashboard-shell">
+      <aside class="sidebar">
+        <div class="brand-box">
+          <span class="brand-mark">R+</span>
+          <span class="brand-text">reaproveita</span>
+        </div>
+
+        <div class="profile-box">
+          <div class="avatar">RP</div>
+          <span>Gestão</span>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="/" class="nav-link active">
+            <span class="nav-icon">🏠</span>
+            <span>Dashboard</span>
+          </a>
+          <a href="/estabelecimentos" class="nav-link">
+            <span class="nav-icon">🏬</span>
+            <span>Estabelecimentos</span>
+          </a>
+          <a href="/alimentos" class="nav-link">
+            <span class="nav-icon">🥖</span>
+            <span>Alimentos</span>
+          </a>
+          <a href="/reservas" class="nav-link">
+            <span class="nav-icon">📦</span>
+            <span>Reservas</span>
+          </a>
+          <a href="/relatorios" class="nav-link">
+            <span class="nav-icon">📊</span>
+            <span>Relatórios</span>
+          </a>
+        </nav>
+      </aside>
+
+      <main class="content-panel">
+        <header class="toolbar">
+          <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input type="text" placeholder="Buscar alimentos ou estabelecimentos" />
+          </div>
+
+          <div class="toolbar-actions">
+            <button class="icon-btn" type="button" data-action="favorite" aria-label="Favoritos">♡</button>
+            <button class="icon-btn" type="button" data-action="notification" aria-label="Notificações">◔</button>
+            <button class="icon-btn" type="button" data-action="menu" aria-label="Menu">☰</button>
+          </div>
+        </header>
+
+        <section class="top-metrics">
+          <article class="metric-card metric-card--purple">
+            <div class="ring ring--pink" style="--percent: 35;">
+              <span><%= summary.estabelecimentos %></span>
+            </div>
+            <div class="metric-card__body">
+              <h3>ESTABELECIMENTOS</h3>
+              <p>Unidades ativas cadastradas no sistema.</p>
+            </div>
+            <div class="metric-card__footer">Cadastros ativos</div>
+          </article>
+
+          <article class="metric-card metric-card--purple">
+            <div class="ring ring--purple" style="--percent: 72;">
+              <span><%= summary.alimentos %></span>
+            </div>
+            <div class="metric-card__body">
+              <h3>ITENS EM ESTOQUE</h3>
+              <p>Produtos monitorados por validade e quantidade.</p>
+            </div>
+            <div class="metric-card__footer">Controle de estoque</div>
+          </article>
+
+          <article class="metric-card metric-card--purple">
+            <div class="ring ring--violet" style="--percent: 58;">
+              <span><%= summary.proximos %></span>
+            </div>
+            <div class="metric-card__body">
+              <h3>PRÓXIMOS DO VENCIMENTO</h3>
+              <p>Itens com validade crítica e necessidade de atenção.</p>
+            </div>
+            <div class="metric-card__footer">Alerta de validade</div>
+          </article>
+        </section>
+
+        <section class="chart-grid">
+          <article class="panel-block">
+            <div class="panel-header">
+              <h3>EVOLUÇÃO DO REAPROVEITAMENTO</h3>
+              <div class="legend">
+                <span><i class="dot dot--pink"></i>Reaproveitamento</span>
+                <span><i class="dot dot--purple"></i>Meta</span>
+              </div>
+            </div>
+
+            <div class="bars-chart">
+              <div class="bars-chart__column">
+                <div class="bar-group">
+                  <div class="bar bar--purple" style="height: 36%;"></div>
+                  <div class="bar bar--pink" style="height: 58%;"></div>
+                </div>
+                <span>Jan</span>
+              </div>
+              <div class="bars-chart__column">
+                <div class="bar-group">
+                  <div class="bar bar--purple" style="height: 52%;"></div>
+                  <div class="bar bar--pink" style="height: 62%;"></div>
+                </div>
+                <span>Fev</span>
+              </div>
+              <div class="bars-chart__column">
+                <div class="bar-group">
+                  <div class="bar bar--purple" style="height: 46%;"></div>
+                  <div class="bar bar--pink" style="height: 68%;"></div>
+                </div>
+                <span>Mar</span>
+              </div>
+              <div class="bars-chart__column">
+                <div class="bar-group">
+                  <div class="bar bar--purple" style="height: 66%;"></div>
+                  <div class="bar bar--pink" style="height: 74%;"></div>
+                </div>
+                <span>Abr</span>
+              </div>
+              <div class="bars-chart__column">
+                <div class="bar-group">
+                  <div class="bar bar--purple" style="height: 60%;"></div>
+                  <div class="bar bar--pink" style="height: 72%;"></div>
+                </div>
+                <span>Mai</span>
+              </div>
+              <div class="bars-chart__column">
+                <div class="bar-group">
+                  <div class="bar bar--purple" style="height: 74%;"></div>
+                  <div class="bar bar--pink" style="height: 82%;"></div>
+                </div>
+                <span>Jun</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel-block list-panel">
+            <div class="panel-header">
+              <h3>ALERTAS</h3>
+            </div>
+            <div class="mini-list">
+              <% const alertas = alimentos.slice(0, 3); %>
+              <% alertas.forEach((item, index) => { %>
+                <div class="mini-list__item">
+                  <span class="mini-list__label"><%= item.nome %></span>
+                  <div class="mini-progress">
+                    <i class="mini-progress-fill" data-width="<%= 25 + index * 20 %>"></i>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </article>
+        </section>
+
+        <section class="bottom-grid">
+          <article class="panel-block subscriptions-panel">
+            <div class="panel-header">
+              <h3>RESERVAS</h3>
+            </div>
+            <div class="column-bars">
+              <div class="column-bars__item">
+                <span class="column-bars__value">42</span>
+                <div class="column-bar column-bar--pink" style="height: 42%;"></div>
+              </div>
+              <div class="column-bars__item">
+                <span class="column-bars__value">68</span>
+                <div class="column-bar column-bar--purple" style="height: 68%;"></div>
+              </div>
+              <div class="column-bars__item">
+                <span class="column-bars__value">56</span>
+                <div class="column-bar column-bar--pink" style="height: 56%;"></div>
+              </div>
+              <div class="column-bars__item">
+                <span class="column-bars__value">88</span>
+                <div class="column-bar column-bar--purple" style="height: 88%;"></div>
+              </div>
+              <div class="column-bars__item">
+                <span class="column-bars__value">71</span>
+                <div class="column-bar column-bar--pink" style="height: 71%;"></div>
+              </div>
+              <div class="column-bars__item">
+                <span class="column-bars__value">85</span>
+                <div class="column-bar column-bar--purple" style="height: 85%;"></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel-block calendar-panel">
+            <div class="panel-header center">
+              <h3>VALIDADE</h3>
+            </div>
+            <div class="calendar-grid">
+              <span class="calendar-day month">D</span>
+              <span class="calendar-day month">S</span>
+              <span class="calendar-day month">T</span>
+              <span class="calendar-day month">Q</span>
+              <span class="calendar-day month">Q</span>
+              <span class="calendar-day month">S</span>
+              <span class="calendar-day month">S</span>
+
+              <span class="calendar-day disabled">1</span>
+              <span class="calendar-day disabled">2</span>
+              <span class="calendar-day">3</span>
+              <span class="calendar-day">4</span>
+              <span class="calendar-day">5</span>
+              <span class="calendar-day">6</span>
+              <span class="calendar-day">7</span>
+              <span class="calendar-day">8</span>
+              <span class="calendar-day">9</span>
+              <span class="calendar-day">10</span>
+              <span class="calendar-day">11</span>
+              <span class="calendar-day">12</span>
+              <span class="calendar-day active">13</span>
+              <span class="calendar-day">14</span>
+              <span class="calendar-day">15</span>
+              <span class="calendar-day">16</span>
+              <span class="calendar-day">17</span>
+              <span class="calendar-day">18</span>
+              <span class="calendar-day">19</span>
+              <span class="calendar-day">20</span>
+              <span class="calendar-day">21</span>
+              <span class="calendar-day">22</span>
+              <span class="calendar-day">23</span>
+              <span class="calendar-day">24</span>
+              <span class="calendar-day">25</span>
+              <span class="calendar-day">26</span>
+              <span class="calendar-day">27</span>
+              <span class="calendar-day">28</span>
+              <span class="calendar-day">29</span>
+              <span class="calendar-day">30</span>
+            </div>
+          </article>
+        </section>
+
+        <section class="earning-panel">
+          <div class="panel-header">
+            <h3>VALOR EVITADO</h3>
+          </div>
+
+          <div class="chart-wave">
+            <div class="wave-bubble bubble--one"><%= formatCurrency(summary.evitado || 0) %></div>
+            <div class="wave-bubble bubble--two">R$ 350</div>
+            <div class="wave-bubble bubble--three">R$ 400</div>
+            <div class="wave wave--one"></div>
+            <div class="wave wave--two"></div>
+          </div>
+
+          <div class="week-labels">
+            <span>Seg</span>
+            <span>Ter</span>
+            <span>Qua</span>
+            <span>Qui</span>
+            <span>Sex</span>
+            <span>Sáb</span>
+            <span>Dom</span>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const shell = document.querySelector('.dashboard-shell');
+      const actionButtons = document.querySelectorAll('[data-action]');
+
+      const progressBars = document.querySelectorAll('.mini-progress-fill');
+
+      progressBars.forEach((bar) => {
+        const percent = bar.dataset.width || '50';
+        bar.style.width = percent + '%';
+      });
+
+      actionButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const action = button.dataset.action;
+
+          actionButtons.forEach((btn) => btn.classList.remove('active'));
+          button.classList.add('active');
+
+          if (action === 'favorite') {
+            button.textContent = '♥';
+            button.setAttribute('aria-label', 'Favoritos ativados');
+          }
+
+          if (action === 'notification') {
+            button.textContent = '◉';
+            button.setAttribute('aria-label', 'Notificações ativadas');
+          }
+
+          if (action === 'menu') {
+            shell.classList.toggle('sidebar-collapsed');
+            button.textContent = '☰';
+            button.setAttribute('aria-label', shell.classList.contains('sidebar-collapsed') ? 'Abrir menu' : 'Fechar menu');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reservas | reaproveita+</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="dashboard-page">
+    <div class="dashboard-shell">
+      <aside class="sidebar">
+        <div class="brand-box">
+          <span class="brand-mark">R+</span>
+          <span class="brand-text">reaproveita</span>
+        </div>
+        <div class="profile-box">
+          <div class="avatar">RP</div>
+          <span>Gestão</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/" class="nav-link <%= currentPage === '/' ? 'active' : '' %>"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+          <a href="/estabelecimentos" class="nav-link <%= currentPage === '/estabelecimentos' ? 'active' : '' %>"><span class="nav-icon">🏬</span><span>Estabelecimentos</span></a>
+          <a href="/alimentos" class="nav-link <%= currentPage === '/alimentos' ? 'active' : '' %>"><span class="nav-icon">🥖</span><span>Alimentos</span></a>
+          <a href="/reservas" class="nav-link <%= currentPage === '/reservas' ? 'active' : '' %>"><span class="nav-icon">📦</span><span>Reservas</span></a>
+          <a href="/relatorios" class="nav-link <%= currentPage === '/relatorios' ? 'active' : '' %>"><span class="nav-icon">📊</span><span>Relatórios</span></a>
+        </nav>
+      </aside>
+
+      <main class="content-panel">
+        <div class="page-header">
+          <div>
+            <p class="page-kicker">Você está em:</p>
+            <h1>📦 <%= currentPageLabel %></h1>
+          </div>
+        </div>
+
+        <section class="form-card">
+          <div class="section-header">
+            <h2>Registrar reserva ou doação</h2>
+          </div>
+
+          <form method="POST" action="/reservas" class="form-grid">
+            <label>
+              Alimento
+              <select name="alimento_id" required>
+                <option value="">Selecione</option>
+                <% alimentos.forEach((item) => { %>
+                  <option value="<%= item.id %>"><%= item.nome %> · <%= item.estabelecimento_nome %></option>
+                <% }) %>
+              </select>
+            </label>
+            <label>
+              Cliente / Beneficiário
+              <input type="text" name="cliente_nome" placeholder="Nome da pessoa/ONG" required />
+            </label>
+            <label>
+              Quantidade
+              <input type="number" name="quantidade" min="1" required />
+            </label>
+            <label>
+              Tipo
+              <select name="tipo" required>
+                <option value="">Selecione</option>
+                <option value="reserva">Reserva</option>
+                <option value="desconto">Desconto</option>
+                <option value="doacao">Doação</option>
+              </select>
+            </label>
+            <label class="full-width">
+              Observação
+              <textarea name="observacao" rows="3" placeholder="Detalhes da operação, retirada, canal de doação etc."></textarea>
+            </label>
+            <div class="form-actions full-width">
+              <button type="submit">✅ Salvar operação</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="table-card">
+          <div class="section-header">
+            <h2>Histórico de reservas</h2>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Cliente</th>
+                <th>Tipo</th>
+                <th>Qtd.</th>
+                <th>Status</th>
+                <th>Atualizar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (reservas.length === 0) { %>
+                <tr>
+                  <td colspan="6" class="empty">Nenhuma operação registrada.</td>
+                </tr>
+              <% } else { %>
+                <% reservas.forEach((reserva) => { %>
+                  <tr>
+                    <td><%= reserva.alimento_nome %></td>
+                    <td><%= reserva.cliente_nome %></td>
+                    <td><%= reserva.tipo %></td>
+                    <td><%= reserva.quantidade %></td>
+                    <td>
+                      <span class="badge <%= reserva.status === 'confirmada' || reserva.status === 'concluida' ? 'success' : reserva.status === 'pendente' ? 'warning' : 'danger' %>">
+                        <%= reserva.status %>
+                      </span>
+                    </td>
+                    <td>
+                      <form method="POST" action="/reservas/<%= reserva.id %>/status" class="inline-form">
+                        <select name="status">
+                          <option value="pendente" <%= reserva.status === 'pendente' ? 'selected' : '' %>>Pendente</option>
+                          <option value="confirmada" <%= reserva.status === 'confirmada' ? 'selected' : '' %>>Confirmada</option>
+                          <option value="concluida" <%= reserva.status === 'concluida' ? 'selected' : '' %>>Concluída</option>
+                          <option value="cancelada" <%= reserva.status === 'cancelada' ? 'selected' : '' %>>Cancelada</option>
+                        </select>
+                        <button type="submit">💾 Salvar</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } %>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

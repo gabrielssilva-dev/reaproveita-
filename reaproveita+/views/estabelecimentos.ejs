@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estabelecimentos | reaproveita+</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="dashboard-page">
+    <div class="dashboard-shell">
+      <aside class="sidebar">
+        <div class="brand-box">
+          <span class="brand-mark">R+</span>
+          <span class="brand-text">reaproveita</span>
+        </div>
+        <div class="profile-box">
+          <div class="avatar">RP</div>
+          <span>Gestão</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/" class="nav-link <%= currentPage === '/' ? 'active' : '' %>"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+          <a href="/estabelecimentos" class="nav-link <%= currentPage === '/estabelecimentos' ? 'active' : '' %>"><span class="nav-icon">🏬</span><span>Estabelecimentos</span></a>
+          <a href="/alimentos" class="nav-link <%= currentPage === '/alimentos' ? 'active' : '' %>"><span class="nav-icon">🥖</span><span>Alimentos</span></a>
+          <a href="/reservas" class="nav-link <%= currentPage === '/reservas' ? 'active' : '' %>"><span class="nav-icon">📦</span><span>Reservas</span></a>
+          <a href="/relatorios" class="nav-link <%= currentPage === '/relatorios' ? 'active' : '' %>"><span class="nav-icon">📊</span><span>Relatórios</span></a>
+        </nav>
+      </aside>
+
+      <main class="content-panel">
+        <div class="page-header">
+          <div>
+            <p class="page-kicker">Você está em:</p>
+            <h1>🏬 <%= currentPageLabel %></h1>
+          </div>
+        </div>
+
+        <section class="form-card">
+          <div class="section-header">
+            <h2>Cadastro de estabelecimentos</h2>
+          </div>
+
+          <form method="POST" action="/estabelecimentos" class="form-grid">
+            <label>
+              Nome
+              <input type="text" name="nome" placeholder="Ex.: Padaria Central" required />
+            </label>
+            <label>
+              Tipo
+              <select name="tipo" required>
+                <option value="">Selecione</option>
+                <option value="Padaria">Padaria</option>
+                <option value="Restaurante">Restaurante</option>
+                <option value="Supermercado">Supermercado</option>
+                <option value="Mercado">Mercado</option>
+              </select>
+            </label>
+            <label>
+              Endereço
+              <input type="text" name="endereco" placeholder="Rua, número, bairro" />
+            </label>
+            <label>
+              Telefone
+              <input type="text" name="telefone" placeholder="(11) 99999-0000" />
+            </label>
+            <div class="form-actions">
+              <button type="submit">➕ Cadastrar estabelecimento</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="table-card">
+          <div class="section-header">
+            <h2>Estabelecimentos cadastrados</h2>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Endereço</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (estabelecimentos.length === 0) { %>
+                <tr>
+                  <td colspan="5" class="empty">Nenhum estabelecimento cadastrado.</td>
+                </tr>
+              <% } else { %>
+                <% estabelecimentos.forEach((estabelecimento) => { %>
+                  <tr>
+                    <td><%= estabelecimento.nome %></td>
+                    <td><%= estabelecimento.tipo %></td>
+                    <td><%= estabelecimento.endereco || '—' %></td>
+                    <td><%= estabelecimento.telefone || '—' %></td>
+                    <td>
+                      <form method="POST" action="/estabelecimentos/<%= estabelecimento.id %>/delete" onsubmit="return confirm('Deseja realmente excluir este estabelecimento?');">
+                        <button type="submit" class="danger-button">🗑️ Excluir</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } %>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
